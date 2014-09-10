@@ -46,13 +46,10 @@ is_empty() {
     return $(ls -A $dir | wc -l)
 }
 
-nuke_empty() {
-    go_root
-
-    for i in *; do
-        is_empty $i && echo -n "$i "
+list_empty() {
+    for i in $ASDROOT/*; do
+        is_empty $i && echo $(basename $i)
     done
-    echo
 }
 
 summary() {
@@ -143,6 +140,8 @@ asdkit() {
         echo "    nuke_this"
         echo "    move_this"
         echo "    list_labels"
+        echo "    list_empty"
+        echo "    lsasd"
         echo
         echo "Other aliases:"
         echo "    gs = git status"
