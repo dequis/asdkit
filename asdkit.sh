@@ -21,10 +21,12 @@ get_random_file() {
 
 nuke_this() {
     ensure_root .. || return 1
-    (summary) || echo summary failed
-    echo
-    echo 'enter to continue, ctrl-c to abort'
-    read
+    if ! is_empty; then
+        (summary) || echo summary failed
+        echo
+        echo 'enter to continue, ctrl-c to abort'
+        read
+    fi
     local dir=$PWD
     cd ..
     rm -rf $dir
