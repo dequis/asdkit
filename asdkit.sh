@@ -21,7 +21,7 @@ get_random_file() {
 
 nuke_this() {
     ensure_root .. || return 1
-    dir=$(realpath .)
+    local dir=$(realpath .)
     (summary) || echo summary failed
     echo
     echo 'enter to continue, ctrl-c to abort'
@@ -33,7 +33,7 @@ nuke_this() {
 
 enter_sneaky() {
     go_root
-    dir=${1:-$(get_random_file)}
+    local dir=${1:-$(get_random_file)}
     cd $dir || return 1
 }
 
@@ -42,7 +42,7 @@ indent() {
 }
 
 is_empty() {
-    dir=${1:-.}
+    local dir=${1:-.}
     return $(ls -A $dir | wc -l)
 }
 
@@ -64,8 +64,8 @@ summary() {
     else
         echo "ls:"
         for i in *; do
-            ls_out=$(ls -lhd --color=always $i 2>&1)
-            file_out=$(file -b $i 2>&1 | head -c 30)
+            local ls_out=$(ls -lhd --color=always $i 2>&1)
+            local file_out=$(file -b $i 2>&1 | head -c 30)
             printf "    %-30s | %-80s\n" $file_out $ls_out
         done
     fi
@@ -106,7 +106,7 @@ fix_labels() {
 
 move_this() {
     ensure_root .. || return 1
-    dir=$(realpath .)
+    local dir=$(realpath .)
     cd ..
     mv -v $dir $1
     echo
@@ -114,7 +114,7 @@ move_this() {
 }
 
 summary_oneline() {
-    dir=${1:-.}
+    local dir=${1:-.}
     if [ -e $dir/label ]; then
         cat $dir/label
     else
@@ -124,8 +124,8 @@ summary_oneline() {
 
 lsasd() {
     for i in $(find . -maxdepth 1 -type d -printf "%T@ %p\n" | sort -n | sed 's/^[^ ]* //'); do
-        ls_out=$(ls -lhd --color=always $i 2>&1)
-        summary=$(summary_oneline $i | head -c20)
+        local ls_out=$(ls -lhd --color=always $i 2>&1)
+        local summary=$(summary_oneline $i | head -c20)
         printf "%-20s | %-80s\n" $summary $i
     done
 }
