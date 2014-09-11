@@ -19,13 +19,17 @@ get_random_file() {
     ls -1 | sort -R | head -n1
 }
 
+wait_for_confirmation() {
+    echo 'enter to continue, ctrl-c to abort'
+    read
+}
+
 nuke_this() {
     ensure_root .. || return 1
     if ! is_empty; then
         (summary) || echo summary failed
         echo
-        echo 'enter to continue, ctrl-c to abort'
-        read
+        wait_for_confirmation || return 1
     fi
     local dir=$PWD
     cd ..
@@ -51,6 +55,22 @@ is_empty() {
 list_empty() {
     for i in $ASDROOT/*; do
         is_empty $i && echo $(basename $i)
+    done
+}
+
+nuke_empty() {
+    go_root
+    local -a empty_dirs
+    empty_dirs=($(list_empty))
+
+    echo Empty dirs:
+    echo "    "${empty_dirs[@]}
+
+    wait_for_confirmation
+
+    for i in $empty_dirs; do
+        cd $i
+        nuke_this
     done
 }
 
@@ -140,6 +160,7 @@ asdkit() {
         echo "    summary       (alias s)"
         echo "    label         (alias l)"
         echo "    nuke_this"
+        echo "    nuke_empty"
         echo "    move_this"
         echo "    list_labels"
         echo "    list_empty"
