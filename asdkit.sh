@@ -21,11 +21,11 @@ get_random_file() {
 
 nuke_this() {
     ensure_root .. || return 1
-    local dir=$(realpath .)
     (summary) || echo summary failed
     echo
     echo 'enter to continue, ctrl-c to abort'
     read
+    local dir=$PWD
     cd ..
     rm -rf $dir
     echo nuked $dir
@@ -106,7 +106,7 @@ fix_labels() {
 
 move_this() {
     ensure_root .. || return 1
-    local dir=$(realpath .)
+    local dir=$PWD
     cd ..
     mv -v $dir $1
     echo
