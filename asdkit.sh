@@ -85,9 +85,11 @@ summary() {
         echo "directory empty"
     else
         echo "ls:"
+        local ls_out
+        local file_out
         for i in *; do
-            local ls_out=$(ls -lhd --color=always $i 2>&1)
-            local file_out=$(file -b $i 2>&1 | head -c 30)
+            ls_out=$(ls -lhd --color=always $i 2>&1)
+            file_out=$(file -b $i 2>&1 | head -c 30)
             printf "    %-30s | %-80s\n" $file_out $ls_out
         done
     fi
@@ -145,9 +147,11 @@ summary_oneline() {
 }
 
 lsasd() {
+    local ls_out
+    local summary
     for i in $(find . -maxdepth 1 -type d -printf "%T@ %p\n" | sort -n | sed 's/^[^ ]* //'); do
-        local ls_out=$(ls -lhd --color=always $i 2>&1)
-        local summary=$(summary_oneline $i | head -c20)
+        ls_out=$(ls -lhd --color=always $i 2>&1)
+        summary=$(summary_oneline $i | head -c20)
         printf "%-20s | %-80s\n" $summary $i
     done
 }
