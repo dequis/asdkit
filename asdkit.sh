@@ -142,7 +142,11 @@ summary_oneline() {
     if [ -e $dir/label ]; then
         cat $dir/label
     else
-        echo "asd"
+        if [ $(ls -1A $dir | wc -l) = 1 ]; then
+            echo $(ls -1A $dir)
+        else
+            echo asd
+        fi
     fi
 }
 
